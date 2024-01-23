@@ -1,0 +1,17 @@
+main
+{
+    display: flex;
+    height: calc(100vh - 37px);
+}
+
+#sectionA 
+{
+    background-color: aqua;
+    flex: 8;
+}
+
+#sectionB 
+{
+    background-color: rgb(156, 156, 187);    
+    flex: 6;
+}
