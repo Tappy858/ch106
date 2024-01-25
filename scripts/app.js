@@ -1,55 +1,62 @@
-function sayHello(name, lastName) {
-    console.log("Hello " + name + " " + lastName);
+//global variables
+let iconImportant = false;
+
+function saveTask() {
+  console.log("Saving task");
+  //get the values
+  const title = $("#title").val();
+  const description = $("#description").val();
+  const color = $("#color").val();
+  const startDate = $("#startDate").val();
+  const status = $("#status").val();
+  const budget = $("#budget").val();
+  //build the object
+  let taskToSave = new Task(title, description, color, startDate, status, budget);
+  console.log(taskToSave);
+
+  // Display user inputs in sectionA
+  displayUserInputs(taskToSave);
+
+  //save logic
+  $.ajax({
+    type: "POST",
+    url: "http://fsdiapi.azurewebsites.net/api/tasks/",
+    data: JSON.stringify(taskToSave),
+    contentType: "application/json",
+    success: function (res) {
+      console.log(res);
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  });
 }
 
-function sum(num1, num2) {
-    const res = num1 + num2;
-    return res;
+function displayUserInputs(userInputs) {
+  let userInputsContent = `
+    <h2>User Inputs:</h2>
+    <p><strong>Title:</strong> ${userInputs.title}</p>
+    <p><strong>Description:</strong> ${userInputs.description}</p>
+    <p><strong>Color:</strong> <span style="color:${userInputs.color};">${userInputs.color}</span></p>
+    <p><strong>Start Date:</strong> ${userInputs.startDate}</p>
+    <p><strong>Status:</strong> ${userInputs.status}</p>
+    <p><strong>Budget:</strong> ${userInputs.budget}</p>
+  `;
+
+  // Update the content of #userInputs in #sectionA
+  $("#userInputs").append(userInputsContent);
 }
 
-function printNumbers() {
-    //print numbers  from 1 to 20
-    //except 7 and 13
-    let sum = 0;
-    let count = 0;
-    
-    let numbers = [
-    12, 4, 123, 4567, 234, 56, 12, 87, 124, 865, 233, 788, 43, 91, 544, 782,
-    653, 845,
-    ];
-    for (let i = 1; i < 21; i++) {
-    if (i != 7 && i != 13) {
-        console.log(i);
-    }
-    }
-    for (let i = 0; i < numbers.length; i++) {
-    let num = numbers[i];
-    console.log(num);
-    //sum numbers
-    sum = num;
-    //only greater numbers
-    if (num > 500)
-    count += 1;
-    }
-    console.log("the sum of the numbers is: " + sum);
-    console.log("there are "+count+ " number bigger than 500")
-}
-  // 1)print every number  in the list
-  // 2)print the sum of all numbers
-  // 3)print how many numbers are greater than 500
+// Existing functions...
+
 function init() {
-    console.log("Hello world!");
-    const x = "Adrian";
-    sayHello(x, "Aguinaga");
-    sayHello("John", "Doe");
-    const result = sum(21, 12);
-    console.log(result);
-    printNumbers();
-}
-  //create a function that sums two numbers and excecute it in the init
-window.onload = init;
-  //window.onload = init(); this is a not
+  console.log("This is the parent of everything");
+  //load data
 
-  //PRINCIPLE
-  //DRY -- DONT REPEAT YOUR SELF
-  //KISS - KEEP IT SIMPLE
+  //hook events
+  $("#btnSave").click(saveTask);
+  $("#iImportant").click(changeIcon);
+  //document.getElementById("btnSave").click(saveTask);
+}
+
+window.onload = init;
